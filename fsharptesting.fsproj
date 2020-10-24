@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="globals.fs" />
+        <Compile Include="Logic.fs" />
+        <Compile Include="PlatformerGame.fs" />
+        <Compile Include="Program.fs" />
+        <Content Include="Content\Content.mgcb" />
+        <Content Include="Content\ball.png" />
+        <Content Include="assets\ball.png" />
+        <Content Include=".gitignore" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <MonoGameContentReference Include="Content\Content.mgcb" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+      <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+    </ItemGroup>
+
+</Project>
