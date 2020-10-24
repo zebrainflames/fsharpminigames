@@ -7,6 +7,8 @@ open System
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 
+open fsharptesting.Globals
+
 
 let drawLine (sb: SpriteBatch, t: Texture2D, a: Vector2, b: Vector2, lw: int, c: Color) =
     let edge = b - a
@@ -29,3 +31,7 @@ let drawRect (sb: SpriteBatch, t: Texture2D, r: Rectangle, c: Color) =
     let r = float32 r.Right
 
     ()
+    
+let draw_fullscreen_tex(sb : SpriteBatch, t : Texture2D) =
+    let r = Rectangle(0 , 0, screen_width, screen_height)
+    do sb.Draw(t, r, Color.White)
