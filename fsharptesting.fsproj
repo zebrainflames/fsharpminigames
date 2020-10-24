@@ -6,9 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="globals.fs" />
+        <Compile Include="DrawUtils.fs" />
+        <Compile Include="Globals.fs" />
         <Compile Include="Logic.fs" />
-        <Compile Include="PlatformerGame.fs" />
+        <Compile Include="Game.fs" />
         <Compile Include="Program.fs" />
         <Content Include="Content\Content.mgcb" />
         <Content Include="Content\ball.png" />
@@ -21,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="fantomas" Version="4.2.0" />
       <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
       <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
     </ItemGroup>

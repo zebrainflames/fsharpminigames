@@ -1,6 +1,6 @@
 ﻿// Learn more about F# at http://fsharp.org
 
-open fsharptesting.PlatformerGame
+open fsharptesting.Game
 
 [<EntryPoint>]
 let main argv =
