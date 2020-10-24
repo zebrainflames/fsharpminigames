@@ -19,11 +19,18 @@ type Game1() as game =
 
     let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
 
-    let mutable t = Unchecked.defaultof<Texture2D>
-    let mutable ball = Unchecked.defaultof<Texture2D>
-    let mutable ball_position = Unchecked.defaultof<Vector2>
+    let mutable white_texture = Unchecked.defaultof<Texture2D>
+    
+    // Game Assets
+    let background = lazy ( game.Content.Load<Texture2D> "background" )
+    let foreground = lazy ( game.Content.Load<Texture2D> "foreground" )
 
-
+    let draw_scenery (sb : SpriteBatch) =
+        draw_fullscreen_tex(sb, background.Value)
+        draw_fullscreen_tex(sb, foreground.Value)
+    
+    /// Member bindings & overriders below
+    /// 
     override game.Initialize() =
         do base.Initialize()
         graphics.PreferredBackBufferWidth <- screen_width
@@ -34,25 +41,22 @@ type Game1() as game =
 
     override game.LoadContent() =
         device <- graphics.GraphicsDevice
-        t <- new Texture2D(device, 1, 1)
-        t.SetData<Color>([| Color.White |])
+        white_texture <- new Texture2D(device, 1, 1)
+        white_texture.SetData<Color>([| Color.White |])
         spriteBatch <- new SpriteBatch(device)
 
-        ball <- game.Content.Load<Texture2D>("ball")
-
+        
         ()
 
     override game.Update(gameTime) =
-        ball_position <- new_position ball_position
         ()
 
     override game.Draw(gameTime) =
         do game.GraphicsDevice.Clear Color.Peru
         spriteBatch.Begin()
-        drawLine (spriteBatch, t, Vector2(200.0f, 200.0f), Vector2(100.0f, 50.0f), 3, Color.Red)
-        //_spriteBatch.Draw(ballTexture, new Vector2(0, 0), Color.White);
-        spriteBatch.Draw(ball, ball_position, Color.White)
-
+        
+        draw_scenery spriteBatch
+        
         spriteBatch.End()
 
         base.Draw gameTime

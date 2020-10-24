@@ -6,8 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="DrawUtils.fs" />
         <Compile Include="Globals.fs" />
+        <Compile Include="DrawUtils.fs" />
         <Compile Include="Logic.fs" />
         <Compile Include="Game.fs" />
         <Compile Include="Program.fs" />

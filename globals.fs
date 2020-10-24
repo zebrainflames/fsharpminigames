@@ -1,4 +1,4 @@
 ﻿module fsharptesting.Globals
 
-let screen_width = 800
-let screen_height = 600
+let screen_width = 1024
+let screen_height = 768
