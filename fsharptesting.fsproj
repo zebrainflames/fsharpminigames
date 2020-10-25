@@ -9,6 +9,7 @@
         <Compile Include="Globals.fs" />
         <Compile Include="DrawUtils.fs" />
         <Compile Include="Logic.fs" />
+        <Compile Include="PlayerData.fs" />
         <Compile Include="Game.fs" />
         <Compile Include="Program.fs" />
         <Content Include="Content\Content.mgcb" />

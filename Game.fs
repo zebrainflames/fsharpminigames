@@ -6,13 +6,14 @@ open Microsoft.Xna.Framework.Graphics
 open fsharptesting.Globals
 open fsharptesting.Logic
 open fsharptesting.DrawUtils
+open fsharptesting.PlayerData
 
 
 
 
 type Game1() as game =
     inherit Game()
-
+    // framework config etc.
     do game.Content.RootDirectory <- "Content"
     let graphics = new GraphicsDeviceManager(game)
     let mutable device = graphics.GraphicsDevice
@@ -24,7 +25,23 @@ type Game1() as game =
     // Game Assets
     let background = lazy ( game.Content.Load<Texture2D> "background" )
     let foreground = lazy ( game.Content.Load<Texture2D> "foreground" )
-
+    let cannon = lazy ( game.Content.Load<Texture2D> "cannon" )
+    let carriage = lazy ( game.Content.Load<Texture2D> "carriage" )
+    
+    let player_scale = lazy ( 40.0f / float32 carriage.Value.Width )
+    
+    // game logic
+    let players = create_players [ Vector2(100.f,193.f); Vector2(200.f,212.f); Vector2(300.f,361.f); Vector2(400.f,164.f)]
+    let number_of_players = players |> List.length
+    
+    let null_rect = System.Nullable<Rectangle>()
+    
+    let draw_player (sb : SpriteBatch) ( pd : PlayerData) =
+        let scale = player_scale.Value
+        do sb.Draw(carriage.Value,
+                   pd.position, null_rect, pd.color, 0.0f, Vector2(0.f, float32 carriage.Value.Height),
+                   scale, SpriteEffects.None, 0.0f)
+    
     let draw_scenery (sb : SpriteBatch) =
         draw_fullscreen_tex(sb, background.Value)
         draw_fullscreen_tex(sb, foreground.Value)
@@ -56,6 +73,12 @@ type Game1() as game =
         spriteBatch.Begin()
         
         draw_scenery spriteBatch
+        
+        List.filter (fun (p : PlayerData) -> p.is_alive) players
+        |> List.iter (fun p -> draw_player spriteBatch p)
+        
+        //for p in alive_players do
+        //    draw_player spriteBatch p
         
         spriteBatch.End()
 
