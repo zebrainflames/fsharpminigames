@@ -4,11 +4,7 @@
     <projectFile>fsharptesting.fsproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="387d3711-c846-4629-a688-085611a74c18" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.fsharpminigames.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/globals.fs" beforeDir="false" afterPath="$PROJECT_DIR$/Globals.fs" afterDir="false" />
-    </list>
+    <list default="true" id="387d3711-c846-4629-a688-085611a74c18" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,27 +68,27 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1870" height="274" key="GridCell.Tab.0.bottom" timestamp="1603571721850">
+    <state width="1870" height="274" key="GridCell.Tab.0.bottom" timestamp="1603792637302">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1870" height="274" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1603571721850" />
-    <state width="1870" height="274" key="GridCell.Tab.0.center" timestamp="1603571721849">
+    <state width="1870" height="274" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1603792637302" />
+    <state width="1870" height="274" key="GridCell.Tab.0.center" timestamp="1603792637302">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1870" height="274" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1603571721849" />
-    <state width="1870" height="274" key="GridCell.Tab.0.left" timestamp="1603571721848">
+    <state width="1870" height="274" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1603792637302" />
+    <state width="1870" height="274" key="GridCell.Tab.0.left" timestamp="1603792637301">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1870" height="274" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1603571721848" />
-    <state width="1870" height="274" key="GridCell.Tab.0.right" timestamp="1603571721850">
+    <state width="1870" height="274" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1603792637301" />
+    <state width="1870" height="274" key="GridCell.Tab.0.right" timestamp="1603792637302">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1870" height="274" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1603571721850" />
+    <state width="1870" height="274" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1603792637302" />
   </component>
 </project>
