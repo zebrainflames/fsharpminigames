@@ -1,5 +1,6 @@
 ﻿module fsharptesting.Game
 
+open System.Numerics
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 
@@ -41,6 +42,11 @@ type Game1() as game =
         do sb.Draw(carriage.Value,
                    pd.position, null_rect, pd.color, 0.0f, Vector2(0.f, float32 carriage.Value.Height),
                    scale, SpriteEffects.None, 0.0f)
+        
+        let cannon_origin = Vector2(11.f, 50.f)
+        let cannon_offset = Vector2(20.f, -10.f)
+        do sb.Draw(cannon.Value, pd.position + cannon_offset, null_rect, pd.color, pd.angle, cannon_origin,
+                   scale, SpriteEffects.None, 1.0f)
     
     let draw_scenery (sb : SpriteBatch) =
         draw_fullscreen_tex(sb, background.Value)

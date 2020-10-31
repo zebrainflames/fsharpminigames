@@ -1,3 +1,5 @@
 ﻿bin
 obj
 .idea
+.idea/*
+.idea/.idea.fsharpminigames.dir/.idea/workspace.xml

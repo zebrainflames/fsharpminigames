@@ -26,7 +26,7 @@
     
     let create_players positions =
         let n = positions |> List.length
-        let a = MathHelper.ToRadians(90.0f) 
+        let a = MathHelper.ToRadians(45.0f) 
         let p_base = {position= Vector2(0.f,0.f);  is_alive= true; angle = a; power = 100.0f; color = Color.White }
         [ for i in 0 .. (n - 1) do
             let c = player_colors.Item(i)
