@@ -59,6 +59,7 @@ type Game1() as game =
         graphics.PreferredBackBufferWidth <- screen_width
         graphics.PreferredBackBufferHeight <- screen_height
         graphics.IsFullScreen <- false
+        game.Window.Title <- "BombGophers"
         graphics.ApplyChanges()
         ()
 
