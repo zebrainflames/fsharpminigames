@@ -4,10 +4,12 @@ open System.Numerics
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 
+open Microsoft.Xna.Framework.Graphics
 open fsharptesting.Globals
 open fsharptesting.Logic
 open fsharptesting.DrawUtils
 open fsharptesting.PlayerData
+open fsharptesting.MineSweeperUtils
 
 
 
@@ -24,33 +26,32 @@ type Game1() as game =
     let mutable white_texture = Unchecked.defaultof<Texture2D>
     
     // Game Assets
-    let background = lazy ( game.Content.Load<Texture2D> "background" )
-    let foreground = lazy ( game.Content.Load<Texture2D> "foreground" )
-    let cannon = lazy ( game.Content.Load<Texture2D> "cannon" )
-    let carriage = lazy ( game.Content.Load<Texture2D> "carriage" )
-    
-    let player_scale = lazy ( 40.0f / float32 carriage.Value.Width )
-    
-    // game logic
-    let players = create_players [ Vector2(100.f,193.f); Vector2(200.f,212.f); Vector2(300.f,361.f); Vector2(400.f,164.f)]
-    let number_of_players = players |> List.length
-    
+    let ms_texture = lazy ( game.Content.Load<Texture2D> "minesweeper/mw_assets")
+    let ts = 18.0f
+    let grid_width = 19
+    let grid_height = 14
+      
     let null_rect = System.Nullable<Rectangle>()
     
-    let draw_player (sb : SpriteBatch) ( pd : PlayerData) =
-        let scale = player_scale.Value
-        do sb.Draw(carriage.Value,
-                   pd.position, null_rect, pd.color, 0.0f, Vector2(0.f, float32 carriage.Value.Height),
-                   scale, SpriteEffects.None, 0.0f)
-        
-        let cannon_origin = Vector2(11.f, 50.f)
-        let cannon_offset = Vector2(20.f, -10.f)
-        do sb.Draw(cannon.Value, pd.position + cannon_offset, null_rect, pd.color, pd.angle, cannon_origin,
-                   scale, SpriteEffects.None, 1.0f)
+    let draw_number pos num =
+        let y = tile_size
+        let x = (num - 1) * tile_size
+        let r = Rectangle(x, y, tile_size, tile_size)
+        draw_from_sheet(spriteBatch, ms_texture.Value, pos, r)
     
-    let draw_scenery (sb : SpriteBatch) =
-        draw_fullscreen_tex(sb, background.Value)
-        draw_fullscreen_tex(sb, foreground.Value)
+    let draw_tile pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, basic_tile_rect)
+    let draw_hl_tile pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, hl_tile_rect)
+    let draw_mine pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, mine_rect)
+    let draw_flag pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, flag_rect)
+    let draw_qmark pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, qmark_rect)
+        
+    let draw_board (sb : SpriteBatch) =
+        let ts = 18.0f
+        draw_tile Vector2.Zero
+        draw_hl_tile(Vector2(ts, 0.0f))
+        draw_mine (Vector2(ts*2.f, 0.0f))
+        draw_flag (Vector2(ts*3f, 0.0f))
+        draw_qmark (Vector2(ts * 4f, 0f))
     
     /// Member bindings & overriders below
     /// 
@@ -59,7 +60,7 @@ type Game1() as game =
         graphics.PreferredBackBufferWidth <- screen_width
         graphics.PreferredBackBufferHeight <- screen_height
         graphics.IsFullScreen <- false
-        game.Window.Title <- "BombGophers"
+        game.Window.Title <- "Minesweeper"
         graphics.ApplyChanges()
         ()
 
@@ -76,18 +77,13 @@ type Game1() as game =
         ()
 
     override game.Draw(gameTime) =
-        do game.GraphicsDevice.Clear Color.Peru
+        do game.GraphicsDevice.Clear Color.Aqua
         spriteBatch.Begin()
+        // Start of draw calls from the actual game
         
-        draw_scenery spriteBatch
-        
-        List.filter (fun (p : PlayerData) -> p.is_alive) players
-        |> List.iter (fun p -> draw_player spriteBatch p)
-        
-        //for p in alive_players do
-        //    draw_player spriteBatch p
-        
-        spriteBatch.End()
+        draw_board spriteBatch
 
+        // Sprite batch ends, drawing stops
+        spriteBatch.End()
         base.Draw gameTime
         ()
