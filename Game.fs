@@ -33,11 +33,12 @@ type Game1() as game =
       
     let null_rect = System.Nullable<Rectangle>()
     
-    let draw_number pos num =
+    let draw_number pos (num : int) =
         let y = tile_size
         let x = (num - 1) * tile_size
         let r = Rectangle(x, y, tile_size, tile_size)
         draw_from_sheet(spriteBatch, ms_texture.Value, pos, r)
+        ()
     
     let draw_tile pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, basic_tile_rect)
     let draw_hl_tile pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, hl_tile_rect)
@@ -83,6 +84,12 @@ type Game1() as game =
         
         draw_board spriteBatch
 
+        let start_pos = Vector2(0.f, ts)
+        for i in 1 .. 8 do
+            let pos = start_pos + Vector2(float32(i - 1)*ts, 0f)
+            do draw_number pos i
+            
+        
         // Sprite batch ends, drawing stops
         spriteBatch.End()
         base.Draw gameTime
