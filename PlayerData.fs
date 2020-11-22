@@ -7,7 +7,7 @@
         position : Vector2
         is_alive : bool
         color    : Color
-        angle    : float32
+        mutable angle    : float32
         power    : float32
     }
     

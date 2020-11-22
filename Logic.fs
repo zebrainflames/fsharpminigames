@@ -3,6 +3,13 @@
 open Microsoft.Xna.Framework
 open fsharptesting.Globals
 
+[<Struct>]
+type input_state = {
+    da : float32
+    power : float32
+}
+
+
 let move_speed = 2.0f
 
 

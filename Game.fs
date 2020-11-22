@@ -1,8 +1,8 @@
 ﻿module fsharptesting.Game
 
-open System.Numerics
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
+open Microsoft.Xna.Framework.Input
 
 open fsharptesting.Globals
 open fsharptesting.Logic
@@ -29,13 +29,17 @@ type Game1() as game =
     let cannon = lazy ( game.Content.Load<Texture2D> "cannon" )
     let carriage = lazy ( game.Content.Load<Texture2D> "carriage" )
     
+    // rendering tools
+    let null_rect = System.Nullable<Rectangle>()
+    
+    
     let player_scale = lazy ( 40.0f / float32 carriage.Value.Width )
     
     // game logic
     let players = create_players [ Vector2(100.f,193.f); Vector2(200.f,212.f); Vector2(300.f,361.f); Vector2(400.f,164.f)]
     let number_of_players = players |> List.length
     
-    let null_rect = System.Nullable<Rectangle>()
+    let current_player = 0
     
     let draw_player (sb : SpriteBatch) ( pd : PlayerData) =
         let scale = player_scale.Value
@@ -51,6 +55,17 @@ type Game1() as game =
     let draw_scenery (sb : SpriteBatch) =
         draw_fullscreen_tex(sb, background.Value)
         draw_fullscreen_tex(sb, foreground.Value)
+    
+    let process_input (keyboard_state : KeyboardState ) =
+        let left = keyboard_state.IsKeyDown(Keys.A)
+        let right = keyboard_state.IsKeyDown(Keys.D)
+        let a = if left then
+                    -0.1f
+                elif right then
+                    0.1f
+                else
+                    0.0f
+        {da = a; power = 0.0f}
     
     /// Member bindings & overriders below
     /// 
@@ -73,6 +88,10 @@ type Game1() as game =
         ()
 
     override game.Update(gameTime) =
+        // TODO: why doesn't calling Keyboard.GetState() work in F# function directly..? -> keep F# functions pure for now...
+        let keyboard_state = Keyboard.GetState()
+        let input = process_input keyboard_state
+        players.[current_player].angle <- players.[current_player].angle + input.da
         ()
 
     override game.Draw(gameTime) =
