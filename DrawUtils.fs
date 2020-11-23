@@ -12,7 +12,7 @@ open fsharptesting.Globals
 let draw_from_sheet(sb : SpriteBatch, t: Texture2D, position : Vector2, rect : Rectangle) =
     //this.Draw(texture, position, sourceRectangle, color, rotation, origin, scale1, effects, layerDepth);
         let nullable_r = System.Nullable<Rectangle> rect
-        sb.Draw(t, position, nullable_r, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f)
+        sb.Draw(t, position, nullable_r, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.f)
         ()
 
 let drawLine (sb: SpriteBatch, t: Texture2D, a: Vector2, b: Vector2, lw: int, c: Color) =
