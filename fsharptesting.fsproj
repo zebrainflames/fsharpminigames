@@ -6,6 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Matrix.fs" />
+        <Compile Include="Cell.fs" />
         <Compile Include="Globals.fs" />
         <Compile Include="MineSweeperUtils.fs" />
         <Compile Include="DrawUtils.fs" />

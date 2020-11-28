@@ -6,6 +6,7 @@ open Microsoft.Xna.Framework.Graphics
 
 open Microsoft.Xna.Framework.Graphics
 open Microsoft.Xna.Framework.Input
+open fsharptesting.Cell
 open fsharptesting.Globals
 open fsharptesting.Logic
 open fsharptesting.DrawUtils
@@ -35,6 +36,13 @@ type Game1() as game =
     let mutable (grid_pos_string : string) = sprintf "Pos: (%d, %d)" 1 1
     let null_rect = System.Nullable<Rectangle>()
     
+    let mutable game_board = create_board grid_width grid_height
+    
+    let num_rect n =
+        let y = tile_size
+        let x = (n - 1) * tile_size
+        Rectangle(x, y, tile_size, tile_size)
+    
     let draw_number pos (num : int) =
         let y = tile_size
         let x = (num - 1) * tile_size
@@ -47,14 +55,22 @@ type Game1() as game =
     let draw_mine pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, mine_rect)
     let draw_flag pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, flag_rect)
     let draw_qmark pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, qmark_rect)
+    let draw_empty pos = draw_from_sheet(spriteBatch, ms_texture.Value, pos, empty_tile_rect)
+    
+    let draw_with_rect pos rect = draw_from_sheet(spriteBatch, ms_texture.Value, pos, rect)
+    
+    let draw_cell pos cell =
+        let rect =
+            match cell with
+            | Empty -> empty_tile_rect
+            | Neighbour n -> num_rect n
+            | Bomb -> mine_rect
+            | CoveredBomb -> basic_tile_rect
+            | _ -> hl_tile_rect
+        draw_with_rect pos rect
         
+    
     let draw_board (sb : SpriteBatch) =
-        // Game draw ops -> examples
-        //draw_tile Vector2.Zero
-        //draw_hl_tile(Vector2(ts, 0.0f))
-        //draw_mine (Vector2(ts*2.f, 0.0f))
-        //draw_flag (Vector2(ts*3f, 0.0f))
-        //draw_qmark (Vector2(ts * 4f, 0f))
         for x in 0.f .. float32 grid_width do
             for y in 0.f .. float32 grid_height do
                 let pos = Vector2(x*ts, y*ts)
@@ -62,7 +78,7 @@ type Game1() as game =
         ()
         
     
-    
+    let mouse_coord () = mouse_state tile_size grid_width grid_height
     
     /// Member bindings & overriders below
     /// 
@@ -75,6 +91,7 @@ type Game1() as game =
         graphics.IsFullScreen <- false
         game.Window.Title <- "Minesweeper"
         graphics.ApplyChanges()
+        
         ()
 
     override game.LoadContent() =
@@ -85,8 +102,7 @@ type Game1() as game =
     
     
     override game.Update(gameTime) =
-        
-        let (m_x, m_y) = mouse_state tile_size grid_width grid_height
+        let (m_x, m_y) = mouse_coord()
         grid_pos_string <- sprintf "Pos: (%d, %d)" m_x m_y
         ()
 
@@ -95,10 +111,20 @@ type Game1() as game =
         spriteBatch.Begin()
         // Start of draw calls from the actual game
         
-        draw_board spriteBatch
-        let (m_x, m_y) = mouse_state tile_size grid_width grid_height
+        //draw_board spriteBatch
+        let (m_x, m_y) = mouse_coord()
         let mouse_pos = Vector2(float32(m_x)*ts, float32(m_y)*ts)
-        draw_hl_tile mouse_pos
+        
+        for x in 0.f .. float32 grid_width do
+            for y in 0.f .. float32 grid_height do
+                let pos = Vector2(x*ts, y*ts)
+                if m_x = int x && m_y = int y then
+                    if mouse_pressed() then
+                        draw_empty mouse_pos
+                    else
+                        draw_hl_tile mouse_pos
+                else
+                    draw_tile pos
         
         // Draw text & other UI
         //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
