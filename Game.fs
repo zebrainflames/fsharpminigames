@@ -108,12 +108,12 @@ type Game1() as game =
         grid_pos_string <- sprintf "Pos: (%d, %d)" m_x m_y
         
         if mouse_pressed() then
-            game_board.[m_x, m_y] <- Empty
-        
+            //game_board.[m_x, m_y] <- Empty
+            open_cell game_board m_x m_y
         ()
 
     override game.Draw(gameTime) =
-        do game.GraphicsDevice.Clear Color.Aqua
+        do game.GraphicsDevice.Clear Color.SlateGray
         spriteBatch.Begin()
         // Start of draw calls from the actual game
         
