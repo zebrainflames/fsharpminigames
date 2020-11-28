@@ -59,15 +59,23 @@ type Game1() as game =
     
     let draw_with_rect pos rect = draw_from_sheet(spriteBatch, ms_texture.Value, pos, rect)
     
-    let draw_cell pos cell =
+    
+    let empty_or_num_rect matrix x y =
+        let num = neighbour_bombs matrix x y grid_width grid_height
+        if num = 0 then
+            empty_tile_rect
+        else
+            num_rect num
+    
+    let draw_cell x y cell =
         let rect =
             match cell with
-            | Empty -> empty_tile_rect
-            | Neighbour n -> num_rect n
+            | Empty -> empty_or_num_rect game_board x y
             | Bomb -> mine_rect
             | CoveredBomb -> basic_tile_rect
             | Closed -> basic_tile_rect
             | _ -> hl_tile_rect
+        let pos = Vector2(float32 (x*tile_size), float32 (y*tile_size))
         draw_with_rect pos rect
         
     
@@ -75,13 +83,24 @@ type Game1() as game =
         for x in 0..grid_width do
             for y in 0..grid_height do
                 let cell = game_board.[x, y]
-                let pos = Vector2(float32 (x*tile_size), float32 (y*tile_size))
-                draw_cell pos cell
+                
+                draw_cell x y cell
         ()
         
     
     let mouse_coord () = mouse_state tile_size grid_width grid_height
     
+    let rec cascade_empty_cells m_x m_y =
+        let recurse = open_cell game_board m_x m_y grid_width grid_height
+        if not recurse then
+            ()          
+        else
+            for dx in -1..1 do
+                for dy in -1..1 do
+                    if dx <> 0 || dy <> 0 then
+                        if m_x + dx >= 0 && m_x + dx <= grid_width && m_y + dy >= 0 && m_y + dy <= grid_height then
+                            cascade_empty_cells (m_x + dx) (m_y + dy)
+        
     /// Member bindings & overriders below
     /// 
     override game.Initialize() =
@@ -92,6 +111,7 @@ type Game1() as game =
         graphics.PreferredBackBufferHeight <- preferred_height
         graphics.IsFullScreen <- false
         game.Window.Title <- "Minesweeper"
+        game.IsMouseVisible <- true
         graphics.ApplyChanges()
         
         ()
@@ -108,8 +128,8 @@ type Game1() as game =
         grid_pos_string <- sprintf "Pos: (%d, %d)" m_x m_y
         
         if mouse_pressed() then
-            //game_board.[m_x, m_y] <- Empty
-            open_cell game_board m_x m_y
+            cascade_empty_cells m_x m_y
+        
         ()
 
     override game.Draw(gameTime) =
