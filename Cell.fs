@@ -6,6 +6,7 @@
         | Bomb
         | CoveredBomb
         | Neighbour of int
+        | Closed
         
         
     type Board = { cells : Matrix<Cell> } with
@@ -14,8 +15,8 @@
     
     // TODO: generate board properly
     let create_board w h =
-        let matrix = Matrix<Cell>(w, h)
-        for i in 0..(w-1) do
-                for j in 0..(h-1) do
-                    matrix.[i, j] <- Empty
+        let matrix = Matrix<Cell>(w+1, h+1)
+        for i in 0..(w) do
+                for j in 0..(h) do
+                    matrix.[i, j] <- Closed
         matrix

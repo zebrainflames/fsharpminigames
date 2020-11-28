@@ -66,15 +66,17 @@ type Game1() as game =
             | Neighbour n -> num_rect n
             | Bomb -> mine_rect
             | CoveredBomb -> basic_tile_rect
+            | Closed -> basic_tile_rect
             | _ -> hl_tile_rect
         draw_with_rect pos rect
         
     
-    let draw_board (sb : SpriteBatch) =
-        for x in 0.f .. float32 grid_width do
-            for y in 0.f .. float32 grid_height do
-                let pos = Vector2(x*ts, y*ts)
-                draw_tile pos
+    let draw_board () =
+        for x in 0..grid_width do
+            for y in 0..grid_height do
+                let cell = game_board.[x, y]
+                let pos = Vector2(float32 (x*tile_size), float32 (y*tile_size))
+                draw_cell pos cell
         ()
         
     
@@ -104,6 +106,10 @@ type Game1() as game =
     override game.Update(gameTime) =
         let (m_x, m_y) = mouse_coord()
         grid_pos_string <- sprintf "Pos: (%d, %d)" m_x m_y
+        
+        if mouse_pressed() then
+            game_board.[m_x, m_y] <- Empty
+        
         ()
 
     override game.Draw(gameTime) =
@@ -114,7 +120,7 @@ type Game1() as game =
         //draw_board spriteBatch
         let (m_x, m_y) = mouse_coord()
         let mouse_pos = Vector2(float32(m_x)*ts, float32(m_y)*ts)
-        
+        (*
         for x in 0.f .. float32 grid_width do
             for y in 0.f .. float32 grid_height do
                 let pos = Vector2(x*ts, y*ts)
@@ -124,7 +130,8 @@ type Game1() as game =
                     else
                         draw_hl_tile mouse_pos
                 else
-                    draw_tile pos
+                    draw_tile pos*)
+        draw_board()
         
         // Draw text & other UI
         //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
