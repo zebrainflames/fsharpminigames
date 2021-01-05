@@ -20,7 +20,7 @@
     
     let random_cell_type () =
         let n = rand.Next(0, 101)
-        if n <= 3 then
+        if n <= 10 then
             CoveredBomb
         else
             Closed

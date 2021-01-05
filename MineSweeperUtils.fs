@@ -23,8 +23,12 @@
         let selected_y = MathHelper.Clamp(state.Y / tile_size, 0, max_y)
         (selected_x, selected_y)
     
-    let mouse_pressed () : bool =
+    let left_click () : bool =
         let state = Mouse.GetState()
         state.LeftButton = ButtonState.Pressed
+    
+    let right_click () : bool =
+        let state = Mouse.GetState ()
+        state.RightButton = ButtonState.Pressed
         
         

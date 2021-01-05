@@ -1,16 +1,10 @@
 ﻿module fsharptesting.Game
 
-open System.Numerics
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 
-open Microsoft.Xna.Framework.Graphics
-open Microsoft.Xna.Framework.Input
 open fsharptesting.Cell
-open fsharptesting.Globals
-open fsharptesting.Logic
 open fsharptesting.DrawUtils
-open fsharptesting.PlayerData
 open fsharptesting.MineSweeperUtils
 
 
@@ -37,6 +31,28 @@ type Game1() as game =
     let null_rect = System.Nullable<Rectangle>()
     
     let mutable game_board = create_board grid_width grid_height
+    
+    let mutable won = false
+    
+    let bomb_locations =
+        let mutable ctr = 0
+        let locs = [
+            for i in 0..grid_width ->
+                [for j in 0..grid_height ->
+                    if game_board.[i,j] = CoveredBomb then
+                        ctr <- ctr + 1
+                        Some (Vector2(float32 i, float32 j))
+                    else
+                        None
+                        ]]
+        locs |> List.concat |> List.choose id 
+    
+    let is_bomb_location pos =
+        List.contains pos bomb_locations
+    
+    let mutable flags : Vector2 list = []
+    
+    let mutable right_click_pressed = false
     
     let num_rect n =
         let y = tile_size
@@ -86,7 +102,12 @@ type Game1() as game =
                 
                 draw_cell x y cell
         ()
-        
+    
+    let draw_flags () =
+        for f in flags do
+            let pos = Vector2(f.X * (float32 tile_size), f.Y * (float32 tile_size))
+            draw_flag pos
+        ()
     
     let mouse_coord () = mouse_state tile_size grid_width grid_height
     
@@ -100,7 +121,31 @@ type Game1() as game =
                     if dx <> 0 || dy <> 0 then
                         if m_x + dx >= 0 && m_x + dx <= grid_width && m_y + dy >= 0 && m_y + dy <= grid_height then
                             cascade_empty_cells (m_x + dx) (m_y + dy)
+    
+    let check_flag m_x m_y =
+        let rec remove_first pred lst =
+            match lst with
+            | h::t when pred h -> t
+            | h::t -> h::remove_first pred t
+            | _ -> []
         
+        let vec = Vector2(float32 m_x, float32 m_y)
+        if flags |> List.contains vec then
+            printf "Flag already set at (%d, %d), removing\n" m_x m_y
+            flags <- flags |> remove_first (fun flag -> flag = vec)
+        else
+            flags <- vec::flags
+            printf "Added flag at (%d, %d)\n" m_x m_y
+            
+        if is_bomb_location vec then
+            printf "Clicked location is bomb location\n"
+        else
+            printf "clicked location is not bomb location\n"
+        ()
+    
+    let flags_missing () =
+        bomb_locations |> List.map (fun pos -> flags |> List.contains pos) |> List.contains false
+    
     /// Member bindings & overriders below
     /// 
     override game.Initialize() =
@@ -113,6 +158,8 @@ type Game1() as game =
         game.Window.Title <- "Minesweeper"
         game.IsMouseVisible <- true
         graphics.ApplyChanges()
+        
+        //bomb_locations ()
         
         ()
 
@@ -127,8 +174,20 @@ type Game1() as game =
         let (m_x, m_y) = mouse_coord()
         grid_pos_string <- sprintf "Pos: (%d, %d)" m_x m_y
         
-        if mouse_pressed() then
+        if left_click() then
             cascade_empty_cells m_x m_y
+        
+        let rc = right_click()
+        if rc && not right_click_pressed then
+            check_flag m_x m_y
+            right_click_pressed <- true
+        elif not rc then
+            right_click_pressed <- false
+        
+        let bombs_not_flagged = flags_missing ()
+        if not bombs_not_flagged && not won then
+            printfn "All bombs successfully flagged!"
+            won <- true
         
         ()
 
@@ -140,19 +199,11 @@ type Game1() as game =
         //draw_board spriteBatch
         let (m_x, m_y) = mouse_coord()
         let mouse_pos = Vector2(float32(m_x)*ts, float32(m_y)*ts)
-        (*
-        for x in 0.f .. float32 grid_width do
-            for y in 0.f .. float32 grid_height do
-                let pos = Vector2(x*ts, y*ts)
-                if m_x = int x && m_y = int y then
-                    if mouse_pressed() then
-                        draw_empty mouse_pos
-                    else
-                        draw_hl_tile mouse_pos
-                else
-                    draw_tile pos*)
+
         draw_board()
-        
+
+        draw_flags ()
+                
         // Draw text & other UI
         //spriteBatch.DrawString(font, "Score", new Vector2(100, 100), Color.Black);
         do spriteBatch.DrawString(font.Value, grid_pos_string, Vector2.Zero, Color.Black)
