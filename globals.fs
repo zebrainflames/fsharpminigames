@@ -1,10 +1,10 @@
 ﻿module fsharptesting.Globals
 open Microsoft.Xna.Framework
 
-//800
-let screen_width = 1920
+//1920
+let screen_width = 800
 //600
-let screen_height = 1080
+let screen_height = 600
 
 //3840 x 2160
 

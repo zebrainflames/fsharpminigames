@@ -7,7 +7,6 @@
 
     <ItemGroup>
         <Compile Include="Globals.fs" />
-        <Compile Include="Fractal.fs" />
         <Compile Include="DrawUtils.fs" />
         <Compile Include="Logic.fs" />
         <Compile Include="Game.fs" />

@@ -22,10 +22,6 @@ let drawLine (sb: SpriteBatch, t: Texture2D, a: Vector2, b: Vector2, lw: int, c:
     sb.Draw(t, rect, System.Nullable(), c, float32 angle, Vector2.Zero, SpriteEffects.None, 0.0f)
     ()
 
-let drawRect (sb: SpriteBatch, t: Texture2D, r: Rectangle, c: Color) =
-    let b = float32 r.Bottom
-    let t = float32 r.Top
-    let l = float32 r.Left
-    let r = float32 r.Right
-
+let drawRect (sb: SpriteBatch, t: Texture2D, rect: Rectangle, c: Color) =
+    sb.Draw(t, rect, System.Nullable(), c, 0.0f, Vector2.Zero, SpriteEffects.None, 0.0f)
     ()
