@@ -1,8 +1,7 @@
-﻿// TODO: This module name is stupi :--D
+﻿// TODO: This module name is stupid :--D
 module fsharptesting.Logic
 
 open Microsoft.Xna.Framework
-open fsharptesting.Globals
 
 let clamp coord max =
     if coord > max then max
