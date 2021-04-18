@@ -1,12 +1,12 @@
 ﻿module fsharptesting.Game
 
+open System
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
+open Microsoft.Xna.Framework.Input
 
 open fsharptesting.Globals
-open fsharptesting.Logic
-open fsharptesting.DrawUtils
-
+open fsharptesting.Fractal
 
 
 
@@ -19,40 +19,58 @@ type Game1() as game =
 
     let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
 
-    let mutable t = Unchecked.defaultof<Texture2D>
-    let mutable ball = Unchecked.defaultof<Texture2D>
-    let mutable ball_position = Unchecked.defaultof<Vector2>
+    let mutable fractal_texture = Unchecked.defaultof<Texture2D>
+    let mutable fractal_pos = Unchecked.defaultof<Vector2>
 
-
+    let mutable fractal = Unchecked.defaultof<Fractal>
+    let mutable fractal_updated = false
+    
     override game.Initialize() =
         do base.Initialize()
         graphics.PreferredBackBufferWidth <- screen_width
         graphics.PreferredBackBufferHeight <- screen_height
-        graphics.IsFullScreen <- false
+        graphics.IsFullScreen <- true
         graphics.ApplyChanges()
         ()
 
     override game.LoadContent() =
         device <- graphics.GraphicsDevice
-        t <- new Texture2D(device, 1, 1)
-        t.SetData<Color>([| Color.White |])
+        let f_h, f_w = 60,60
+        fractal_texture <- new Texture2D(device, f_h, f_w)
+        fractal_texture.SetData<Color>([| for i in 0..f_h*f_w - 1 -> if i > 1000 then Color.Peru else Color.Azure |])
         spriteBatch <- new SpriteBatch(device)
 
-        ball <- game.Content.Load<Texture2D>("ball")
-
+        fractal <- new_fractal screen_width screen_height Vector2.Zero device
         ()
 
     override game.Update(gameTime) =
-        ball_position <- new_position ball_position
+        (*
+        // Poll for current keyboard state
+            KeyboardState state = Keyboard.GetState();
+            
+            // If they hit esc, exit
+            if (state.IsKeyDown(Keys.Escape))
+                Exit();
+        *)
+        let state = Keyboard.GetState()
+        if state.IsKeyDown Keys.Escape then
+            game.Exit()
+        
+        if not fractal_updated then
+            fractal_updated <- true
+            fractal <- update_fractal fractal
+            Console.WriteLine("Fractal updated...")
+        
+        
         ()
 
     override game.Draw(gameTime) =
-        do game.GraphicsDevice.Clear Color.Peru
+        do game.GraphicsDevice.Clear Color.Black
         spriteBatch.Begin()
-        drawLine (spriteBatch, t, Vector2(200.0f, 200.0f), Vector2(100.0f, 50.0f), 3, Color.Red)
-        //_spriteBatch.Draw(ballTexture, new Vector2(0, 0), Color.White);
-        spriteBatch.Draw(ball, ball_position, Color.White)
-
+        
+        draw_fractal spriteBatch fractal
+        //spriteBatch.Draw(fractal_texture, Vector2.Zero, Color.White)
+        
         spriteBatch.End()
 
         base.Draw gameTime

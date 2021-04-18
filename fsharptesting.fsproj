@@ -6,8 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="DrawUtils.fs" />
         <Compile Include="Globals.fs" />
+        <Compile Include="Fractal.fs" />
+        <Compile Include="DrawUtils.fs" />
         <Compile Include="Logic.fs" />
         <Compile Include="Game.fs" />
         <Compile Include="Program.fs" />
@@ -15,6 +16,7 @@
         <Content Include="Content\ball.png" />
         <Content Include="assets\ball.png" />
         <Content Include=".gitignore" />
+        <Content Include="scratchpad.txt" />
     </ItemGroup>
 
     <ItemGroup>
